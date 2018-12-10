@@ -1,12 +1,12 @@
-description = """ parent/root module """
+description = """ parent """
 
 plugins {
-    java
+//    java
     base
 }
 
 allprojects {
-    group = "ru.gazprombank.cache"
+//    group = "ru.steklopod"
     version = "1.0"
     repositories {
         gradlePluginPortal()

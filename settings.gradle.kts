@@ -1,4 +1,4 @@
-rootProject.name = "cache-admin"
+rootProject.name = "boot-vue"
 
 include("server", "client")
 
