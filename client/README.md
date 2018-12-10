@@ -1,29 +1,28 @@
-# client
+# `client`
 
-## Project setup
+## Установка:
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Компиляция и горячая перезагрузка
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Компиляция с минимизацией
 ```
 npm run build
 ```
 
-### Run your tests
+### Запуск тестов
 ```
 npm run test
 ```
 
-### Lints and fixes files
+### Линт 
 ```
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[Configuration Reference](https://cli.vuejs.org/config/).
