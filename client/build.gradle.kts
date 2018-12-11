@@ -28,7 +28,7 @@ node { download = false } //TODO ( true - если не установлен npm
 tasks {
     val serverFolder = "../server"
 
-    val npmRunServe by registering(Exec::class) {
+    val npmRun by registering(Exec::class) {
         group = "Npm"
         npmExecute("run", "serve")
         doLast { println(">>> `npm INSTALL` is done ") }
@@ -46,9 +46,9 @@ tasks {
     }
 
     create("magic") {
-        group = "Build"
+        group = "Npm"
         dependsOn(npmInstall)
-        finalizedBy(npmRunServe)
+        finalizedBy(npmRun)
         doLast { println(">>> `npm INSTALL + BUIlD + RUN` is done ") }
     }
 

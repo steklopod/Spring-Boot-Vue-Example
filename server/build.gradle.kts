@@ -4,7 +4,6 @@ import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.
 import org.gradle.internal.impldep.org.junit.experimental.categories.Categories.CategoryFilter.include
 import org.gradle.internal.impldep.org.junit.platform.launcher.EngineFilter.includeEngines
 
-
 description = """ `Server` module """
 
 plugins {
@@ -45,6 +44,7 @@ val springBootVersion = "2.1.0.RELEASE"
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.projectlombok:lombok:1.18.4")
 
     runtime("org.springframework.boot:spring-boot-devtools:$springBootVersion")
@@ -54,7 +54,6 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion")
 //    implementation("org.springframework.boot:spring-boot-starter-thymeleaf:$springBootVersion")
-//    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
 
 }
 
