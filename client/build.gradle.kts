@@ -23,6 +23,7 @@ buildscript {
 repositories { jcenter() }
 dependencies { }
 
+node { download = false } //TODO ( true - если не установлен npm )
 
 tasks {
     val serverFolder = "../server"
@@ -63,10 +64,9 @@ tasks {
         into("$serverFolder/public")
         doLast { println(">>> Frontend dist folder succesfully copied. ") }
     }
-    
+
 }
 
-node { download = false } //TODO ( true - если не установлен npm )
 
 fun Exec.npmExecute(vararg commands: String) {
     val commandsList = listOf("cmd", "/c", "npm", *commands)

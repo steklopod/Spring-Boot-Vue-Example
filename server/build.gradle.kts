@@ -6,7 +6,6 @@ import org.gradle.internal.impldep.org.junit.platform.launcher.EngineFilter.incl
 
 
 description = """ `Server` module """
-// group = "com.okta.developer"
 
 plugins {
     base
@@ -17,7 +16,7 @@ plugins {
 }
 
 application {
-    mainClassName = "com.okta.developer.demo.DemoApplication"
+    mainClassName = "ru.steklopod.App"
 }
 
 buildscript {
@@ -45,17 +44,19 @@ val springBootVersion = "2.1.0.RELEASE"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
-    //implementation("org.springframework.boot:spring-boot-starter-thymeleaf:$springBootVersion")
-//    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
     implementation("org.springframework.boot:spring-boot-starter-data-rest:$springBootVersion")
     implementation("org.projectlombok:lombok:1.18.4")
+
     runtime("org.springframework.boot:spring-boot-devtools:$springBootVersion")
     runtime("com.h2database:h2:1.4.197")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitJupiterEngineVersion")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junitJupiterEngineVersion")
-}
+//    implementation("org.springframework.boot:spring-boot-starter-thymeleaf:$springBootVersion")
+//    implementation("org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion")
 
+}
 
 configure<JavaPluginConvention> {
     sourceCompatibility = VERSION_1_8
@@ -68,49 +69,4 @@ configure<DependencyManagementExtension> {
     }
 }
 
-val frontenFolder = "../client"
-
-tasks {
-    val buildFrontend by registering(Exec::class) {
-        gradleExecute("npmBuild")
-    }
-
-    val runFrontend by registering(Exec::class) {
-        gradleExecute("npmRunServe")
-    }
-
-    val jar by existing {
-        dependsOn(buildFrontend)
-        copy {
-            from(file("$frontenFolder/dist"))
-            into("public")
-        }
-    }
-
-    val bootJar by existing {
-        finalizedBy(runFrontend)
-    }
-
-    withType<ProcessResources> {
-        //TODO
-    }
-
-    getByName<Test>("test") {
-        useJUnitPlatform {
-            includeEngines("junit-jupiter")
-            excludeEngines("junit-vintage")
-        }
-    }
-}
-
-
-fun Exec.gradleExecute(vararg commands: String) {
-    val commandsList = listOf("cmd", "/c", "gradle", *commands)
-    val isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
-    with(this) {
-        workingDir(frontenFolder)
-        if (isWindows) commandLine(commandsList)
-        else commandLine(commandsList.drop(2))
-    }
-}
-
+apply(from = "serverTasks.gradle.kts")

@@ -6,7 +6,7 @@ plugins {
 }
 
 allprojects {
-//    group = "ru.steklopod"
+    group = "ru.steklopod"
     version = "1.0"
     repositories {
         gradlePluginPortal()

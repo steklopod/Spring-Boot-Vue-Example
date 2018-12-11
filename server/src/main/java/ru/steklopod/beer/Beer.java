@@ -1,4 +1,4 @@
-package com.okta.developer.demo.beer;
+package ru.steklopod.beer;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
