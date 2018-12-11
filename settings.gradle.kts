@@ -1,4 +1,4 @@
-rootProject.name = "boot-vue"
+rootProject.name = "spring-vue"
 
 include("server", "client")
 
