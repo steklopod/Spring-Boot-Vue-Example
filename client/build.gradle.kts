@@ -1,6 +1,7 @@
 import com.moowork.gradle.node.npm.NpmTask
 import com.moowork.gradle.node.NodeExtension
 import com.moowork.gradle.node.task.NodeTask
+import com.sun.deploy.config.JREInfo.setArgs
 
 description = """ `client` module (frontend, vue.js) """
 
@@ -22,26 +23,56 @@ buildscript {
 repositories { jcenter() }
 dependencies { }
 
+
 tasks {
-    val inputVueJsCompiledFolder = "/target/dist"
-    val outBackendDir = "/build/resources/custom-ui/"
+    val serverFolder = "../server"
 
-    val dist by registering(Copy::class) {
-        group = "Distribut"
-        description = """ Makes copy of $inputVueJsCompiledFolder folder into $outBackendDir of `server` module. """
-        from(file(inputVueJsCompiledFolder))
-        into(file("../server/$outBackendDir"))
-        doLast { println(">>> Ok. Frontend files from $inputVueJsCompiledFolder have copied.<<<") }
+    val npmRunServe by registering(Exec::class) {
+        group = "Npm"
+        npmExecute("run", "serve")
+        doLast { println(">>> `npm INSTALL` is done ") }
     }
 
-    create<NpmTask>("npmBuild") {
-        group = "Node"
-        description = " Run commands: ``npm run build` & `npm run build` "
-        dependsOn("npmInstall")
-        setArgs(listOf("run", "build"))
-        finalizedBy(dist)
-        doLast { println(">>> Ok. Frontend `run build` is done.") }
+    val npmBuild by registering(Exec::class) {
+        group = "Npm"
+        npmExecute("run", "build")
+        doLast { println(">>> `npm run BUILD` is done.") }
     }
+
+    val npmInstall by existing(NpmTask::class) {
+        finalizedBy(npmBuild)
+        doLast { println(">>> `npm INSTALL` is done ") }
+    }
+
+    create("magic") {
+        group = "Build"
+        dependsOn(npmInstall)
+        finalizedBy(npmRunServe)
+        doLast { println(">>> `npm INSTALL + BUIlD + RUN` is done ") }
+    }
+
+    val clean by registering(Delete::class) {
+        group = "Npm"
+        delete("dist"); delete("node_modules"); delete("package-lock.json")
+        doLast { println(">>> Ok. Cleared <<<") }
+    }
+
+    val copyToServerPublic by registering(Copy::class) {
+        group = "Dist"
+        from(file("dist"))
+        into("$serverFolder/public")
+        doLast { println(">>> Frontend dist folder succesfully copied. ") }
+    }
+    
 }
 
-node { download = false } //TODO (true - if need)
+node { download = false } //TODO ( true - если не установлен npm )
+
+fun Exec.npmExecute(vararg commands: String) {
+    val commandsList = listOf("cmd", "/c", "npm", *commands)
+    val isWindows = System.getProperty("os.name").toLowerCase().contains("windows")
+    with(this) {
+        if (isWindows) commandLine(commandsList)
+        else commandLine(commandsList.drop(2))
+    }
+}
